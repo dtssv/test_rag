@@ -1,0 +1,83 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: advanced-rag
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 5000ms
+
+# Milvus 向量数据库配置
+milvus:
+  host: localhost
+  port: 19530
+  database: default
+  collection-name: rag_vectors
+  embedding-dimension: 1024
+  index-type: IVF_FLAT
+  metric-type: COSINE
+  nlist: 1024
+  top-k: 10
+
+# Elasticsearch 配置
+elasticsearch:
+  host: localhost
+  port: 9200
+  scheme: http
+  username: elastic
+  password: changeme
+  index-name: rag_bm25
+  top-k: 10
+
+# LLM 配置
+llm:
+  embedding:
+    base-url: http://localhost:11434
+    model: bge-m3
+    dimension: 1024
+  chat:
+    base-url: http://localhost:11434
+    model: qwen2.5:7b
+    max-tokens: 4096
+    temperature: 0.7
+  rerank:
+    base-url: http://localhost:11434
+    model: bge-reranker-v2-m3
+    top-n: 5
+
+# RAG 配置
+rag:
+  # 文档分块配置
+  chunk:
+    parent-size: 512
+    parent-overlap: 50
+    child-size: 128
+    child-overlap: 20
+  # 查询扩写
+  query-expansion:
+    enabled: true
+    expansion-count: 3
+  # 混合召回
+  hybrid-retrieval:
+    vector-weight: 0.7
+    bm25-weight: 0.3
+  # 记忆配置
+  memory:
+    short-term:
+      enabled: true
+      max-turns: 10
+      ttl-minutes: 60
+    long-term:
+      enabled: true
+      similarity-threshold: 0.7
+      max-memories: 5
+  # Rerank配置
+  rerank:
+    enabled: true
+    top-n: 5
+  # 评测配置
+  evaluation:
+    enabled: true
