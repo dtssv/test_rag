@@ -7,16 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import javax.xml.ws.Response;
-
-import org.omg.CORBA.Request;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.*;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import main.java.com.rag.config.LlmConfig;
+import com.rag.config.LlmConfig;
 import okhttp3.*;
 
 /**

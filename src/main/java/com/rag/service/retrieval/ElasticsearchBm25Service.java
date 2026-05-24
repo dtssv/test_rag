@@ -10,17 +10,17 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import co.elastic.clients.elasticsearch._types.FieldValue;
 import org.springframework.stereotype.Service;
-
-import apple.laf.JRSUIConstants.Hit;
+import co.elastic.clients.elasticsearch.core.SearchResponse;
+import co.elastic.clients.elasticsearch.core.search.Hit;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.MatchQuery;
-import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.indices.CreateIndexRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import main.java.com.rag.config.ElasticsearchConfig;
+import com.rag.config.ElasticsearchConfig;
 
 /**
  * Elasticsearch BM25检索服务
@@ -61,7 +61,7 @@ public class ElasticsearchBm25Service {
         String indexName = esConfig.getIndexName();
 
         try {
-            esClient.indices().create(CreateIndexRequest.builder()
+            esClient.indices().create(new CreateIndexRequest.Builder()
                     .index(indexName)
                     .mappings(m -> m
                             .properties(FIELD_CHUNK_ID, p -> p.keyword(k -> k))
@@ -186,7 +186,7 @@ public class ElasticsearchBm25Service {
                                         .terms(t -> t
                                                 .field(FIELD_CHUNK_ID)
                                                 .terms(terms -> terms
-                                                        .string(parentChunkIds.stream()
+                                                        .value(parentChunkIds.stream().map(FieldValue::of)
                                                                 .collect(Collectors.toList())))))
                                 .filter(f -> f
                                         .term(t -> t

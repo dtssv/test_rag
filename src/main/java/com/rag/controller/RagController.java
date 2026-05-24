@@ -7,21 +7,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import main.java.com.rag.model.DocumentChunk;
-import main.java.com.rag.model.RagRequest;
-import main.java.com.rag.model.RagResponse;
-import main.java.com.rag.service.chunk.DocumentChunkService;
-import main.java.com.rag.service.llm.LlmClient;
-import main.java.com.rag.service.memory.MemoryService;
-import main.java.com.rag.service.pipeline.RagPipelineService;
-import main.java.com.rag.service.retrieval.ElasticsearchBm25Service;
-import main.java.com.rag.service.retrieval.MilvusVectorService;
+import com.rag.model.DocumentChunk;
+import com.rag.model.RagRequest;
+import com.rag.model.RagResponse;
+import com.rag.service.chunk.DocumentChunkService;
+import com.rag.service.llm.LlmClient;
+import com.rag.service.memory.MemoryService;
+import com.rag.service.pipeline.RagPipelineService;
+import com.rag.service.retrieval.ElasticsearchBm25Service;
+import com.rag.service.retrieval.MilvusVectorService;
 
 /**
  * RAG系统REST API接口
@@ -134,9 +137,12 @@ public class RagController {
     /**
      * 文档入库请求
      */
-    public record DocumentIngestRequest(
-            String documentId,
-            String content,
-            Map<String, Object> metadata) {
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DocumentIngestRequest {
+        private String documentId;
+        private String content;
+        private Map<String, Object> metadata;
     }
 }

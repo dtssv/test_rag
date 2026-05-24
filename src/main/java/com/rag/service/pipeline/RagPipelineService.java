@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import main.java.com.rag.model.RagRequest;
-import main.java.com.rag.model.RagResponse;
-import main.java.com.rag.service.evaluation.EvaluationService;
-import main.java.com.rag.service.evaluation.EvaluationService.EvaluationResult;
-import main.java.com.rag.service.expansion.QueryExpansionService;
-import main.java.com.rag.service.llm.LlmClient;
-import main.java.com.rag.service.memory.MemoryService;
-import main.java.com.rag.service.retrieval.HybridRetrievalService;
-import main.java.com.rag.service.retrieval.HybridRetrievalService.HybridResult;
+import com.rag.model.RagRequest;
+import com.rag.model.RagResponse;
+import com.rag.service.evaluation.EvaluationService;
+import com.rag.service.evaluation.EvaluationService.EvaluationResult;
+import com.rag.service.expansion.QueryExpansionService;
+import com.rag.service.llm.LlmClient;
+import com.rag.service.memory.MemoryService;
+import com.rag.service.retrieval.HybridRetrievalService;
+import com.rag.service.retrieval.HybridRetrievalService.HybridResult;
 
 /**
  * RAG完整Pipeline服务

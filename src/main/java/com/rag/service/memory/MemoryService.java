@@ -7,17 +7,16 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import main.java.com.rag.config.RagConfig;
-import main.java.com.rag.service.llm.LlmClient;
-import main.java.com.rag.service.retrieval.MilvusVectorService;
+import com.rag.config.RagConfig;
+import com.rag.service.llm.LlmClient;
+import com.rag.service.retrieval.MilvusVectorService;
 
 /**
  * 记忆服务
@@ -38,7 +37,6 @@ public class MemoryService {
     private final LlmClient llmClient;
     private final MilvusVectorService milvusVectorService;
     private final RagConfig ragConfig;
-    private final Gson gson = new Gson();
 
     private static final String SHORT_TERM_KEY_PREFIX = "rag:memory:short:";
     private static final String LONG_TERM_COLLECTION = "rag_long_term_memory";
@@ -68,7 +66,7 @@ public class MemoryService {
         ChatMessage message = new ChatMessage(role, content, System.currentTimeMillis());
 
         // 追加消息到列表
-        redisTemplate.opsForList().rightPush(key, gson.toJson(message));
+        redisTemplate.opsForList().rightPush(key, JSON.toJSONString(message));
 
         // 保持最多maxTurns条消息（2条消息=1轮对话，所以限制2*maxTurns）
         long maxSize = config.getMaxTurns() * 2L;
@@ -99,10 +97,8 @@ public class MemoryService {
             return Collections.emptyList();
         }
 
-        Type type = new TypeToken<ChatMessage>() {
-        }.getType();
         return messages.stream()
-                .map(json -> gson.fromJson(json, type))
+                .map(json -> JSONObject.parseObject(json, ChatMessage.class))
                 .collect(Collectors.toList());
     }
 

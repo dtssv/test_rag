@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import main.java.com.rag.config.RagConfig;
-import main.java.com.rag.service.llm.LlmClient;
-import main.java.com.rag.service.rerank.RerankService;
-import main.java.com.rag.service.rerank.RerankService.RerankCandidate;
-import main.java.com.rag.service.rerank.RerankService.RerankedDocument;
+import com.rag.config.RagConfig;
+import com.rag.service.llm.LlmClient;
+import com.rag.service.rerank.RerankService;
+import com.rag.service.rerank.RerankService.RerankCandidate;
+import com.rag.service.rerank.RerankService.RerankedDocument;
 
 /**
  * 混合召回融合策略服务
@@ -78,7 +78,7 @@ public class HybridRetrievalService {
 
         // 5. Rerank（如果启用）
         List<RerankedDocument> rerankedDocs = rerankService.rerank(
-                expandedQueries.get(0), candidates, ragConfig.getRerank().getTopN());
+                expandedQueries.getFirst(), candidates, ragConfig.getRerank().getTopN());
 
         // 6. 获取父块内容
         List<String> parentIds = rerankedDocs.stream()

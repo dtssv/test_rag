@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import main.java.com.rag.config.RagConfig;
-import main.java.com.rag.model.DocumentChunk;
-import main.java.com.rag.model.DocumentChunk.ChunkType;
+import com.rag.config.RagConfig;
+import com.rag.model.DocumentChunk;
+import com.rag.model.DocumentChunk.ChunkType;
 
 /**
  * 文档分块服务
@@ -89,7 +89,7 @@ public class DocumentChunkService {
         int start = 0;
         int chunkIndex = 0;
 
-        while (start < contentLength) {
+        do {
             int end = Math.min(start + chunkSize, contentLength);
 
             // 尝试在句子边界处切割
@@ -117,9 +117,7 @@ public class DocumentChunkService {
             }
 
             start = end - overlap;
-            if (start >= contentLength)
-                break;
-        }
+        } while (start < contentLength);
 
         return chunks;
     }

@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import main.java.com.rag.config.RagConfig;
-import main.java.com.rag.service.llm.LlmClient;
+import com.rag.config.RagConfig;
+import com.rag.service.llm.LlmClient;
 
 /**
  * 查询扩写服务
@@ -63,7 +63,7 @@ public class QueryExpansionService {
                     .map(String::trim)
                     .filter(s -> !s.isEmpty())
                     .limit(config.getExpansionCount())
-                    .collect(Collectors.toList());
+                    .toList();
 
             // 将原始查询放在首位
             List<String> allQueries = new ArrayList<>();

@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import main.java.com.rag.config.RagConfig;
-import main.java.com.rag.service.llm.LlmClient;
-import main.java.com.rag.service.llm.LlmClient.RerankResult;
+import com.rag.config.RagConfig;
+import com.rag.service.llm.LlmClient;
+import com.rag.service.llm.LlmClient.RerankResult;
 
 /**
  * Rerank重排序服务

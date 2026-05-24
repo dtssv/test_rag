@@ -8,11 +8,11 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import com.alibaba.fastjson.JSONObject;
+import io.milvus.v2.common.DataType;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.oracle.jrockit.jfr.DataType;
 
 import io.milvus.v2.client.MilvusClientV2;
 import io.milvus.v2.common.IndexParam;
@@ -26,9 +26,9 @@ import io.milvus.v2.service.vector.response.QueryResp;
 import io.milvus.v2.service.vector.response.SearchResp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import main.java.com.rag.config.MilvusConfig;
-import main.java.com.rag.model.DocumentChunk;
-import main.java.com.rag.model.DocumentChunk.ChunkType;
+import com.rag.config.MilvusConfig;
+import com.rag.model.DocumentChunk;
+import com.rag.model.DocumentChunk.ChunkType;
 
 /**
  * Milvus向量数据库服务
@@ -144,15 +144,15 @@ public class MilvusVectorService {
             return;
 
         String collectionName = milvusConfig.getCollectionName();
-        List<JsonObject> data = new ArrayList<>();
+        List<JSONObject> data = new ArrayList<>();
 
         for (DocumentChunk chunk : chunks) {
-            JsonObject row = new JsonObject();
-            row.addProperty(FIELD_ID, chunk.getChunkId());
-            row.addProperty(FIELD_PARENT_ID, chunk.getParentChunkId() != null ? chunk.getParentChunkId() : "");
-            row.addProperty(FIELD_DOCUMENT_ID, chunk.getDocumentId());
-            row.addProperty(FIELD_CHUNK_TYPE, chunk.getChunkType().name());
-            row.addProperty(FIELD_CONTENT, chunk.getContent());
+            JSONObject row = new JSONObject();
+            row.put(FIELD_ID, chunk.getChunkId());
+            row.put(FIELD_PARENT_ID, chunk.getParentChunkId() != null ? chunk.getParentChunkId() : "");
+            row.put(FIELD_DOCUMENT_ID, chunk.getDocumentId());
+            row.put(FIELD_CHUNK_TYPE, chunk.getChunkType().name());
+            row.put(FIELD_CONTENT, chunk.getContent());
 
             JsonArray embeddingArray = new JsonArray();
             if (chunk.getEmbedding() != null) {
@@ -160,7 +160,7 @@ public class MilvusVectorService {
                     embeddingArray.add(v);
                 }
             }
-            row.add(FIELD_EMBEDDING, embeddingArray);
+            row.put(FIELD_EMBEDDING, embeddingArray);
             data.add(row);
         }
 
@@ -210,7 +210,7 @@ public class MilvusVectorService {
                         .parentChunkId((String) hit.getEntity().get(FIELD_PARENT_ID))
                         .documentId((String) hit.getEntity().get(FIELD_DOCUMENT_ID))
                         .content((String) hit.getEntity().get(FIELD_CONTENT))
-                        .score(hit.getScore())
+                        .score(hit.getDistance())
                         .build();
                 results.add(result);
             }
